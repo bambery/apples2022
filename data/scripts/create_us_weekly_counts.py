@@ -1,7 +1,7 @@
 import os
 import csv
 import pendulum
-import pandas as pd # this is for my convenience, it's not necessary at this stage
+import pandas as pd 
 
 # this script parses through the raw data from jhu and creates weekly counts for USA 
 # by fips (col 0). It omits any international data, or US data unassociated with a
