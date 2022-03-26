@@ -7,19 +7,20 @@ import pandas as pd
 # a fips (col 0) or has other formatting to indicate I am not interested in the data 
 
 source_dir = "../jhu/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/"
-dest_dir = "../jhu/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports_us_only/"
+dest_dir = "../jhu/weekly_us/"
 test_dir = "../jhu/COVID-19/csse_covid_19_data/test/"
 test_dest = "../jhu/COVID-19/csse_covid_19_data/test_dest/"
 
-curr_s = test_dir
-curr_d = test_dest
+curr_s = source_dir
+curr_d = dest_dir 
 
 # I have chosen start/stop on sunday
-#start_date = pendulum.from_format("02-02-2020", "MM-DD-YYYY")
-#end_date = pendulum.from_format("03-13-2022", "MM-DD-YYYY")
+# 3-22-2020 is the first date that began recording fips and cases in the usa
+start_date = pendulum.from_format("03-22-2020", "MM-DD-YYYY")
+end_date = pendulum.from_format("03-13-2022", "MM-DD-YYYY")
 
-start_date = pendulum.from_format("01-01-2022", "MM-DD-YYYY")
-end_date = pendulum.from_format("01-09-2022", "MM-DD-YYYY")
+#test_start_date = pendulum.from_format("01-01-2022", "MM-DD-YYYY")
+#test_end_date = pendulum.from_format("01-09-2022", "MM-DD-YYYY")
 
 """
 def clean(input, week_count):
@@ -64,19 +65,15 @@ week_start = start_date
 keep_going = True
 while (keep_going):
     if (day == 8):
-        output_file = curr_d + todatestr(week_start) + "_week.csv"
         # output weekly report
-
-        foo = pd.DataFrame.from_dict(week_counts, orient='index')
-        foo.to_csv(output_file, header=False)
-        #pd.DataFrame(week_counts, index=[0]).to_csv(output_file)
+        output_file = curr_d + todatestr(week_start) + "_week.csv"
+        df = pd.DataFrame.from_dict(week_counts, orient='index')
+        df.to_csv(output_file, header=False)
 
         # reset weekly vars
-        breakpoint()
         week_counts = {}
         day = 1
         week_start = curr
-#        breakpoint()
 
     next_file = curr_s + todatestr(curr) + ".csv"
     if os.path.exists(next_file):
@@ -86,13 +83,16 @@ while (keep_going):
             # first row is headers - throwing out for now
             for row in reader:
                 if row[0] and row[1] and row[1] != "Unassigned" and not row[1].startswith("Out of"):
-                    fips = int(row[0])
-#                   breakpoint()
+                    try:
+                        fips = int(row[0])
+                    except:
+                        breakpoint()
                     new_tot = int(week_counts.get( fips, 0 )) + int(row[8])
                     week_counts[ fips ]= new_tot 
             day = day + 1
             curr = curr.add(days=1)
             if (curr > end_date):
+                # probably should write out anything I do have to file, but nah
                 keep_going = False
     else:
         raise Exception("trying to open file that doesn't exist: " + next_file) 
