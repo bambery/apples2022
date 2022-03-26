@@ -19,7 +19,7 @@ curr_d = test_dest
 #end_date = pendulum.from_format("03-13-2022", "MM-DD-YYYY")
 
 start_date = pendulum.from_format("01-01-2022", "MM-DD-YYYY")
-end_date = pendulum.from_format("01-19-2022", "MM-DD-YYYY")
+end_date = pendulum.from_format("01-09-2022", "MM-DD-YYYY")
 
 """
 def clean(input, week_count):
@@ -66,30 +66,33 @@ while (keep_going):
     if (day == 8):
         output_file = curr_d + todatestr(week_start) + "_week.csv"
         # output weekly report
-        pd.DataFrame(week_counts, index=[0]).to_csv(output_file)
+
+        foo = pd.DataFrame.from_dict(week_counts, orient='index')
+        foo.to_csv(output_file, header=False)
+        #pd.DataFrame(week_counts, index=[0]).to_csv(output_file)
+
         # reset weekly vars
+        breakpoint()
         week_counts = {}
-        #??????????
-        raise Exception( weekly_counts)
-        breakpoint(pos="eow")
         day = 1
         week_start = curr
+#        breakpoint()
 
     next_file = curr_s + todatestr(curr) + ".csv"
     if os.path.exists(next_file):
         with open(next_file) as file:
-            breakpoint(pos="inside week")
             reader = csv.reader(file, delimiter=",")
             header = next(reader)
             # first row is headers - throwing out for now
             for row in reader:
-                breakpoint(pos="inside row")
                 if row[0] and row[1] and row[1] != "Unassigned" and not row[1].startswith("Out of"):
-                    new_tot = week_counts.get( row[0], "0" ) + row[8]
-                    week_counts[ row[0] ]= new_tot 
+                    fips = int(row[0])
+#                   breakpoint()
+                    new_tot = int(week_counts.get( fips, 0 )) + int(row[8])
+                    week_counts[ fips ]= new_tot 
             day = day + 1
             curr = curr.add(days=1)
-            if (curr < end_date):
+            if (curr > end_date):
                 keep_going = False
     else:
         raise Exception("trying to open file that doesn't exist: " + next_file) 
