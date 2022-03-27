@@ -8,7 +8,12 @@ airline code + city is in an xlsx format:
 https://pythonbasics.org/read-excel/
 I've already installed pandas and xlrd
 
-regarding washington dc: DC is counted as its own FIPS. Dulles, and Reagan are assigned to it instead of their normal states
+regarding washington dc: DC is counted as its own FIPS. Dulles, and Reagan are assigned to it instead 
+of their normal states
+3/26/22
+had very long detour after wikipedia panicked me by giving municipal fips for cities, but examining the JHU data shows that
+Atlanta, GA has fips 13121, and this has an entry in the jhu data, while the fips from wikipedia for atlanta, '13-04000' does 
+not appear in the raw data's fips column - there is no incidence of "4000" appearing
 
 ********
 Step 1: create county table: counties
@@ -60,10 +65,13 @@ Step 3: create airports table
 https://en.wikipedia.org/wiki/List_of_airports_in_the_United_States
 airports-cities.xlsx
 
+going to rewrite cleaning and not do anything manually
+
 manual pre-processing
 +++++++++++++++++++++
 slightly edited from wikipedia:
 -removed some columns
+- removed any non-primary airports
 -added state code
 -deleted state rows	
 
