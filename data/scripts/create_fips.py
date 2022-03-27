@@ -40,6 +40,7 @@ def get_fips():
     df['county'] = df['county'].str.removesuffix(' CENSUS AREA')
     df['county'] = df['county'].str.removesuffix(' BOROUGH')
     df['county'] = df['county'].str.removesuffix(' MUNICIPALITY')
+    df['county'] = df['county'].str.removesuffix(' PARISH')
     df['county'] = df['county'].str.removesuffix(' AND')
 
     # should handle Juneau's strange county name here - the "city" is not wanted for once
@@ -141,12 +142,18 @@ def get_airports_cities():
             header = next(reader)
             state = 'AL' # setting default
             for row in reader:
+                county = '' # empty out county
+                my_fips = '' # empty
                 city = row[0].upper()
                 iata = row[2]
                 airport = row[4]
                 role = row[5]
+                if city == "AMERICAN SAMOA": # we are done
+                    break
                 if (not iata): # we are in a state header row 
                     state_name = city
+                    if city.startswith('PAG'):
+                        breakpoint()
                     if not US_STATES.get(state_name):
                         continue # skip row if not us state
                     state = US_STATES[state_name]
@@ -156,15 +163,92 @@ def get_airports_cities():
                     city = 'WASHINGTON DC'
                     #TODO: continue handling this case
                     continue
+                if city.find("/"):
+                    city = city.partition('/')[0].rstrip()# if the airport has a dual city, choose the first
                 if state == "HI": # hawaii's entries are quoted, I assume to contain the island name
-                    breakpoint()
+                    city = city.partition(',')[0].rstrip()
+                    if iata == 'KOA': # omg this time it is city/county that is missing a dash where airport has one
+                        # I don't like this fix since it seems like the city prefers the dash but shrug
+                        city = 'KAILUA KONA'
                 if state == 'AK': # handling Alaska's special cases
                     # Deadhorse is not technically a city, and I guess wasn't in the cities csv
                     if city == 'DEADHORSE':
                         ans.append([city, state, 'NORTH SLOPE', 2185, iata, role])
                         continue
-                    elif city == 'JUNEAU':
-                        ans.append([city, state, 'NORTH SLOPE', 2185, iata, role])
+                    elif city == 'KLAWOCK':
+                        # county Prince of Wales Hyder is "Wales-Hyder' per fips csv
+                        ans.append([city, state, 'PRINCE OF WALES-HYDER', 2198, iata, role])
+                        continue
+                    elif city == "ST. MARY'S":
+                        ans.append([city, state, 'WADE HAMPTON', 2270, iata, role]) # why no dash in county?
+                        continue
+                    elif city.startswith('UTQ'): # this city is referred to as "Barrow" in fips
+                        ans.append(['BARROW', state, 'NORTH SLOPE', 2185, iata, role]) # city/county doesnt have "city" 
+                        continue
+                if state == 'CA':
+                    if iata == 'ACV': 
+                        city = 'MCKINLEYVILLE' # the aiports csv shows name of this airport (Arcata/Eureka) as the city, which is actually McKinleyville
+                    if iata == 'SNA': # serves 'orange county' but airport is in santa ana
+                        city = 'SANTA ANA'
+                if state == 'CO':
+                    if iata == 'EGE':
+                        city = "EAGLE" # doesn't matter which city is chosen, both in Eagle County
+                if state == 'FL':
+                    if iata == 'PIE':
+                        city = 'SAINT PETERSBURG'
+                if state == 'IL':
+                    if iata == 'BLV':
+                        ans.append([city, state, 'ST. CLAIR', 17163, iata, role]) # st vs saint, this time in county
+                        continue
+                if state == 'IN': # more saints
+                    if iata == 'SBN':
+                        ans.append([city, state, 'ST. JOSEPH', 18141, iata, role]) # st vs saint, this time in county
+                        continue
+                if state == 'KY': # on a combined city, the first listed was actually not in the given state - its a municipal zone
+                    if iata == 'CVG':
+                        ans.append(['COVINGTON', state, 'KENTON', 21117, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                if state == 'MI':
+                    # unsure what to do with city name 'SAULT STE. MARIE' in airport
+                    # name in city/county: 'Sault Sainte Marie'
+                    # county in city/county: CHIPPEWA
+                    if iata == 'CIU':
+                        ans.append(['SAULT SAINTE MARIE', state, 'CHIPPEWA', 26033, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                if state == 'MN':
+                    if iata == 'DLH': # another st vs saint
+                        ans.append(['DULUTH', state, 'ST. LOUIS', 27137, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                    if iata == 'HIB': # another st vs saint
+                        ans.append(['HIBBING', state, 'ST. LOUIS', 27137, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                    if iata == 'MSP': # minneapolis-saint paul
+                        city = 'MINNEAPOLIS'
+                    if iata == 'STC':
+                        city = 'SAINT CLOUD'
+                if state == 'MO':
+                    if iata == 'STL':
+                        ans.append(['SAINT LOUIS', state, 'ST. LOUIS', 29189, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                if state == 'NJ':
+                    if iata == 'EWR': # jersey can keep newark (this is another culprit of the second of two cities being preferred
+                        city = 'NEWARK'
+                if state == "NY":
+                    if iata == 'OGS': # another saint county
+                        ans.append(['OGDENSBURG', state, 'ST. LAWRENCE', 36089, iata, role]) # cincinatti tri-state area not being captured here 
+                        continue
+                if state == 'PA':
+                    if iata == 'AVP':
+                        city = "WILKES BARRE" # entry has dash in airports, no dash in city/county
+                if state == 'SC':
+                    if iata == 'HHH':
+                        city = 'HILTON HEAD ISLAND'
+                if state == 'TN':
+                    if iata == 'TRI':
+                        city = 'BLOUNTVILLE'
+                if state == 'UT':
+                    if iata == 'SGU':
+                        city = "SAINT GEORGE"
 
                 # find the county for this location
                 test_county = cities.loc[(cities['state'] == state) & (cities['city'] == city)]['county']
@@ -176,7 +260,7 @@ def get_airports_cities():
                     if not test_county.empty: # this county name needs a dash in place of whitespace
                         county = test_county.values[0]
                     else: # truly something has gone wrong
-                        print("inside country")
+                        print("inside county")
                         print("something has gone wrong *********")
                         breakpoint()
                 
@@ -189,10 +273,16 @@ def get_airports_cities():
                     test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == dashed_county)]['fips']
                     if not test_fips.empty: # this county name needs a dash in place of whitespace
                         my_fips = test_fips.values[0]
-                    else: # truly something has gone wrong
-                        print(" inside fips")
-                        print("something has gone wrong *********")
-                        breakpoint()
+                    else: # we can try one more thing for the county name - sometimes city/county omits "city" in the county name for blended
+                        city_county = county + " CITY"
+                        test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == city_county)]['fips']
+                        if not test_fips.empty: # this county name needs a dash in place of whitespace
+                            my_fips = test_fips.values[0]
+                        else: # we can try one more thing for the county name 
+                            # truly something has gone wrong
+                            print(" inside fips")
+                            print("something has gone wrong *********")
+                            breakpoint()
                 ans.append([city, state, county, my_fips, iata, role]) 
 
 
