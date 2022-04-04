@@ -43,7 +43,7 @@ def get_fips():
     df['county'] = df['county'].str.removesuffix(' PARISH')
     df['county'] = df['county'].str.removesuffix(' AND')
 
-    # should handle Juneau's strange county name here - the "city" is not wanted for once
+    # should handle Juneau's strange county name here - the "city" is not wanted for once in the county name
 
     return df
 
@@ -59,7 +59,7 @@ def find_city_fips(fips, cities):
 #        breakpoint()
     return cities
 
-# NOTE: It is right here in get_city_counties that I am making the choice to prioritize one county over another, when one city
+# NOTE: It is right here in get_city_counties() that I am making the choice to prioritize one county over another, when one city
 #   is listed as having multiple counties
 # I am going to manually choose for the roughly 30 cities by looking at maps - this only differs in one place from 
 #   the default mechanism used currently
@@ -111,7 +111,7 @@ def get_city_counties():
             #   The input file is ordered by some unknown sorting mechanism which selected the "best" county for each city, 
             #   almost but not always based on geographical overlap with county maps (charlottesville, SC is one such 
             #   exception, see note below) 
-            # If it ever begins to misbehave, I can reject known cities with multiple counties and manually add them in
+            # If it ever begins to misbehave, I can reject known cities with multiple counties and manually add them in, using the designations listed above this method
             usecols=['city', 'state', 'county']).drop_duplicates(keep='first', subset=['city', 'state'])
     # drop any PR or other rows not in the official 50 states (plus DC, which has a unique fips of 11001)
     df = df[df.state.isin(US_STATES.values())]
@@ -120,21 +120,14 @@ def get_city_counties():
     df['city'] = df['city'].str.upper()
     return df
 
-"""
-def get_airports_cities():
-    source = "../airport-cities/airport-cities.csv"
-    df = pd.read_csv(source, 
-            header=0, 
-            names=['city', 'state', 'iata', 'role', 'enplanements'],
-            usecols=['city', 'state', 'iata', 'role'])
-    df['city'] = df['city'].str.upper()
-    return df
-"""
+# method: get_airports_cities() - 
+# 1. read in list of airports [col num]- includes city/state [combined mess in 0], IATA [2], role(hub designation) [5], enplanements [6]
 
 def get_airports_cities():
     # going to manually wrangle this one
     # special cases: hawaii, washingtondc
     source= "../airport-cities/airports_wiki.csv"
+    # constructing the data object this way for easy transfer to pandas - list of lists, where the first list is col headers and all subsequent are rows
     ans = [['city', 'state', 'county', 'fips', 'iata', 'role']]
     if os.path.exists(source):
         with open(source, "r", newline='') as file:
@@ -285,18 +278,8 @@ def get_airports_cities():
                             breakpoint()
                 ans.append([city, state, county, my_fips, iata, role]) 
 
-
-def match_airport_city_county(cities, airports):
-    city_multi = cities.set_index(['city', 'state'])
-    airports_multi = airports.set_index(['city', 'state'])
-    foo = airports_multi.join(city_multi, on=['city', 'state'], how='left')
-    # dupes are the cities listed to multiple counties in the input file
-    dupes = foo[foo.duplicated(['iata'])]
-    breakpoint()
-
 cities = get_city_counties()
 fips = get_fips()
 airports = get_airports_cities()
-#match_airport_city_county(cities, airports)
 #find_city_fips(fips, cities)
 #breakpoint()
