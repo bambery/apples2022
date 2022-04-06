@@ -1,0 +1,213 @@
+cleaning process
+
+arrays/dicts in pandas
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html
+also consider nesting dfs, especially for apples dict
+
+airline code + city is in an xlsx format:
+https://pythonbasics.org/read-excel/
+I've already installed pandas and xlrd
+
+regarding washington dc: DC is counted as its own FIPS. Dulles, and Reagan are assigned to it instead 
+of their normal states
+3/26/22
+had very long detour after wikipedia panicked me by giving municipal fips for cities, but examining the JHU data shows that
+Atlanta, GA has fips 13121, and this has an entry in the jhu data, while the fips from wikipedia for atlanta, '13-04000' does 
+not appear in the raw data's fips column - there is no incidence of "4000" appearing
+
+********
+Step 1: create county table: counties
+********
+source: https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv
+state_and_county_fips_master.csv
+
+input:
+1. first row is column names
+2. throw out any line where the last column is NA - these are just separating states 
+
+data structure : Counties
+-------------------
+1. index - fips - 5 digit int - combine state and county id, preface with 0 if only 4 digits
+- note I will be using this as the primary key for convenience, but I think metropolitan areas are a useful thing to consider (eg NYC, Barrington Hills IL)
+2. name - string (caps)
+3. state - 2 char state code (caps)
+4. edges - starts as an empty array
+
+********
+Step 2: create city/state/county table - links city names to a specific FIPs - city/state is index, fips is the numerically 
+first fips that this city contains (major metro areas, as well as certain other regions,  may have multiple counties per city, see: Chicago, NYC)
+********
+source: https://github.com/grammakov/USA-cities-and-states/blob/master/us_cities_states_counties.csv
+
+manual pre-processing
++++++++++++++++++++++
+- removed all entries that are not of the 50 states
+- removed city alias column
+- deleted all rows that have duplicate entries for city/state/county
+
+processing:
+#####################
+1. read line
+2. look for state/county entry in Counties table
+3. insert new row into this table
+
+data structure: Cities
+-------------------
+1. id
+2. state - 2 char code (caps)
+3. city name (caps)
+4. fips - lookup in other table
+
+
+********
+Step 3: create airports table
+********
+https://en.wikipedia.org/wiki/List_of_airports_in_the_United_States
+airports-cities.xlsx
+
+going to rewrite cleaning and not do anything manually
+
+manual pre-processing
++++++++++++++++++++++
+slightly edited from wikipedia:
+-removed some columns
+- removed any non-primary airports
+-added state code
+-deleted state rows	
+
+processing:
+#####################
+1. read line
+2. search Cities for state + city name - grab and save fips id
+	- gather a list of any cities where no corresponding entry is located
+
+data structure: Airports
+----------------------
+1. IATA
+2. county_id (fips)
+3. category (caps)-     
+    N: Nonhub primary – airports handling over 10,000 but less than 0.05% of the country's annual passenger boardings
+    S: Small hub primary – airports with 0.05 to 0.25% of the country's annual passenger boardings
+    M: Medium hub primary – airports handling 0.25 to 1% of the country's annual passenger boardings
+    L: Large hub primary – airports handling over 1% of the country's annual passenger boardings
+
+********
+Step 4: create Edges table
+********
+1. id
+2. nodes - size 2 array of county_id incident to this edge, asc numerical order
+3. type (caps) - F: flight/A: adjacency
+4. airports - optional array of 2 airport IATA codes representing the flight, in asc alpha order (required for later decisions on how to weight edges)
+5. weight - begins set to 0
+
+********
+Step 5: enter county adjacency edges
+********
+county_adjacency.csv
+
+manual pre-processing
++++++++++++++++++++++
+- converted tab spacing to csv
+- deleted all columns that arent fips
+	
+processing:
+#####################
+1. read line
+	- if line begins with a quote, we have reached a NEW adjacency list
+2. The first line of a new list should contain two identical entries
+	- grab the fips and begin new entry into adjacency table
+3. read next line
+	- if first char is a quote, go to step 1
+	- if first char is a comma grab fips from second column
+3a. - add entry to Edges table 
+	- increment ID
+	- create nodes array - sorted 
+	- set type to A
+	- airports - blank array
+	- weight - set to 0
+3b. - add entry to Counties.edges arrays
+	- for each of the 2 county_ids, in the Counties table, append the ID of this edge to the edge list
+4. go to step 3
+
+********
+Step 6: enter flight adjacency edges
+********
+manual pre-processing
++++++++++++++++++++++
+- read dat into excel as csv
+- deleted all excess columns
+- deduped existing rows (got about half)
+
+processing:
+#####################
+1. read line into array and sort alpha asc
+2. take both airport codes and look up county_ids in Airports table - choose lowest fips
+3. iterate through edge list of the lowest fips 
+	- look at airports array of each edge
+	- compare whether the two airport codes match any of the edges
+	- if yes
+		- read next line
+	- if no
+		- add new entry to Edge table
+		- update BOTH edge arrays in the Counties table to include new edge_id
+
+********
+Step 6: create Apples table
+********
+getting the JHU data:
+https://dev.to/kiwicopple/quick-tip-clone-a-single-folder-from-github-44h6
+NOTE: https://stackoverflow.com/questions/63856348/git-sparse-checkout-not-getting-any-folders
+
+additional information:
+week is sun-sat
+begins on Sunday feb 2, 2020
+
+processing:
+#####################
+1. beginning on [begin date]
+	- set date to begin date
+	- set day to 1 (then increment every time a file is finished)
+-- week loop ---
+2. check if day_count is 7
+3. if yes
+	- save new entry to Apples table
+		- key is date
+		- value is apples dict 
+			-- key fips
+			-- value apples count
+	- set day to 1
+	- empty apples dict
+4. append .csv to the date and check if file exists
+	- if file does not exist, stop
+5. read in line by line
+	- ignore any row that begins with a comma
+	- if row does not begin with a comma, take the FIPS (1st col) and Apples (9th col) and update entry in current Apples dict to add new apple count
+	- if no entry with that fips key in the dict, add entry
+6. at end of file, increment date and go back to beginning of week loop
+
+
+JHU preprocessing:
+https://stackoverflow.com/questions/47151375/python-modifying-a-csv-file
+1. run (jhu.py) script to clean files down to only US counties, output contains only FIPS and deaths, consolidate into weeks
+
+JHU changed formats slightly several times
+3-22-20 - started using fips
+by 7-02-20 added two colummns but rest unchanged: incidence_rate and case-fatality-ratio 
+by 10-02-22: default ordering changed to alpha by countryname
+
+
+
+known issues:
+------
+1 - multiple airports in the same county 
+-- will need to have a table to handle this when reading in data
+https://stackoverflow.com/questions/29302221/modify-csv-files
+(https://scholarlypublishingcollective.org/psup/transportation-journal/article/51/3/265/289789/Route-Competition-in-Multi-Airport-Cities-An)
+
+2 - multiple counties in the same city
+-- see above - CSAs - see New York, where each burrough is a different county, and for the purposes of this exercise, 
+should probably be counted together
+--- the CSAs seem too large - lumping all of NYC and Jersey into one csa where we would like to draw a distinction
+-- wikipedia.org/wiki/List_of_U.S._municipalities_in_multiple_counties
+- 
+

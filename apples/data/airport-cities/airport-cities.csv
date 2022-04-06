@@ -1,0 +1,381 @@
+﻿City,State,IATA,Role,Enplanements
+Allentown,PA,ABE,P-N,376468
+Abilene,TX,ABI,P-N,77229
+Albuquerque,NM,ABQ,P-M,2647269
+Aberdeen,SD,ABR,P-N,28404
+Albany,GA,ABY,P-N,39422
+Nantucket,MA,ACK,P-N,126610
+Waco,TX,ACT,P-N,57344
+Arcata/Eureka,AZ,ACV,P-N,69575
+Atlantic City,NJ,ACY,P-S,568958
+Kodiak,AK,ADQ,P-N,81652
+Alexandria,LA,AEX,P-N,141173
+Augusta,GA,AGS,P-N,300598
+King Salmon,AK,AKN,P-N,44131
+Albany,NY,ALB,P-S,1440674
+Waterloo,IA,ALO,P-N,23892
+Walla Walla,WA,ALW,P-N,49527
+Amarillo,TX,AMA,P-N,355705
+Anchorage,AK,ANC,P-M,2642607
+Aniak,AK,ANI,P-N,12853
+Alpena,MI,APN,P-N,11614
+Watertown,NY,ART,P-N,23844
+Aspen,CO,ASE,P-N,285448
+Atlanta,GA,ATL,P-L,51865797
+Appleton,WI,ATW,P-S,348026
+Watertown,SD,ATY,P-N,12064
+Austin,TX,AUS,P-M,7714479
+Asheville,NC,AVL,P-S,573206
+Wilkes-Barre,PA,AVP,P-N,258628
+Mesa,AZ,AZA,P-S,778972
+Kalamazoo,MI,AZO,P-N,152845
+Hartford,CT,BDL,P-M,3378035
+Bedford,MA,BED,P-N,10194
+Bethel,AK,BET,P-N,160110
+Scottsbluff,NE,BFF,P-N,14295
+Seattle,WA,BFI,P-N,18586
+Bakersfield,AZ,BFL,P-N,105104
+Binghamton,NY,BGM,P-N,36382
+Bangor,ME,BGR,P-N,336140
+Birmingham,AL,BHM,P-S,1457562
+Block Island,RI,BID,P-N,16809
+Billings,MT,BIL,P-N,440263
+Bismarck,ND,BIS,P-N,285198
+Bemidji,MN,BJI,P-N,30081
+Boulder City,NV,BLD,P-N,205690
+Bellingham,WA,BLI,P-N,368186
+Belleville,IL,BLV,P-N,152278
+Bloomington / Normal,IL,BMI,P-N,178057
+Nashville,TN,BNA,P-M,8017347
+Boise,ID,BOI,P-S,1943181
+Boston,MA,BOS,P-L,20006521
+Beaumont,TX,BPT,P-N,27694
+Brunswick,GA,BQK,P-N,40443
+Brainerd,MN,BRD,P-N,22233
+Brownsville,TX,BRO,P-N,115711
+Utqiaġvik (Barrow),AK,BRW,P-N,46450
+Butte,MT,BTM,P-N,25803
+Baton Rouge,LA,BTR,P-N,390107
+Burlington,VT,BTV,P-S,658879
+Buffalo,NY,BUF,P-M,2523158
+Burbank,AZ,BUR,P-M,2680240
+Baltimore,MD,BWI,P-L,13371816
+Bozeman,MT,BZN,P-S,670295
+Columbia,SC,CAE,P-S,566660
+Akron,OH,CAK,P-N,449731
+Concord,AZ,CCR,P-N,13077
+Cedar City,UT,CDC,P-N,15835
+Cordova,AK,CDV,P-N,17654
+Chattanooga,TN,CHA,P-S,504833
+Charlottesville,VA,CHO,P-N,352816
+Charleston,SC,CHS,P-S,2192893
+Cedar Rapids,IA,CID,P-S,602058
+Sault Ste. Marie,MI,CIU,P-N,23324
+Clarksburg,WA,CKB,P-N,36917
+Cleveland,OH,CLE,P-M,4701713
+College Station,TX,CLL,P-N,79309
+Charlotte,NC,CLT,P-L,22281949
+Columbus,OH,CMH,P-M,3976620
+Champaign / Urbana / Savoy,IL,CMI,P-N,109878
+Hancock,MI,CMX,P-N,24041
+Moab,UT,CNY,P-N,14035
+Cody,WY,COD,P-N,39407
+Colorado Springs,CO,COS,P-S,845742
+Columbia,MO,COU,P-N,120235
+Casper,WY,CPR,P-N,86905
+Corpus Christi,TX,CRP,P-N,332499
+Charleston,WA,CRW,P-N,216873
+Columbus,GA,CSG,P-N,49354
+Cincinnati/Covington,KY,CVG,P-M,4269258
+Mosinee,WI,CWA,P-N,124632
+Daytona Beach,FL,DAB,P-N,366967
+Dallas,TX,DAL,P-M,8011221
+Dayton,OH,DAY,P-S,858022
+Dubuque,IA,DBQ,P-N,38831
+"Washington, D.C. / Arlington County",VA,DCA,P-L,11366771
+Denver,CO,DEN,P-L,31362941
+Dallas,TX,DFW,P-L,32821799
+Dothan,AL,DHN,P-N,52855
+Dickinson,ND,DIK,P-N,22595
+Dillingham,AK,DLG,P-N,34496
+Duluth,MN,DLH,P-N,136806
+Durango,CO,DRO,P-N,189225
+Des Moines,IA,DSM,P-S,1347876
+Detroit,MI,DTW,P-L,17436837
+Unalaska,AK,DUT,P-N,29229
+Wenatchee,WA,EAT,P-N,64528
+Eau Claire,WI,EAU,P-N,23950
+Panama City,FL,ECP,P-S,512423
+Eagle/Vail,CO,EGE,P-N,173863
+Elko,NV,EKO,P-N,18363
+Elmira,NY,ELM,P-N,141075
+El Paso,TX,ELP,P-S,1605486
+Kenai,AK,ENA,P-N,93889
+Erie,PA,ERI,P-N,95342
+Escanaba,MI,ESC,P-N,18474
+Eastsound,WA,ESD,P-N,10101
+Eugene,OR,EUG,P-S,566832
+Evansville,IN,EVV,P-N,228850
+New Bern,NC,EWN,P-N,111172
+New York / Newark,NJ,EWR,P-L,22797602
+Key West,FL,EYW,P-N,446005
+Fairbanks,AK,FAI,P-S,549289
+Fargo,ND,FAR,P-N,429667
+Fresno,AZ,FAT,P-S,853538
+Fayetteville,NC,FAY,P-N,234998
+Kalispell,MT,FCA,P-N,307242
+Flagstaff,AZ,FLG,P-N,67793
+Fort Lauderdale,FL,FLL,P-L,17612331
+Florence,SC,FLO,P-N,44333
+Flint,MI,FNT,P-N,361709
+Friday Harbor,WA,FRD,P-N,13497
+Sioux Falls,SD,FSD,P-S,529895
+Fort Smith,AZ,FSM,P-N,86793
+Fort Wayne,IN,FWA,P-N,372030
+Gillette,WY,GCC,P-N,27136
+Garden City,KS,GCK,P-N,25243
+Grand Canyon,AZ,GCN,P-N,289278
+Spokane,WA,GEG,P-S,1872781
+Grand Forks,ND,GFK,P-N,114578
+Longview,TX,GGG,P-N,24588
+Grand Junction,CO,GJT,P-N,221978
+Gainesville,FL,GNV,P-N,233955
+Gulfport / Biloxi,MS,GPT,P-N,359055
+Green Bay,WI,GRB,P-N,314909
+Grand Island,NE,GRI,P-N,63298
+Killeen,TX,GRK,P-N,154328
+Grand Rapids,MI,GRR,P-S,1631398
+Greensboro,NC,GSO,P-S,938593
+Greenville,SC,GSP,P-S,1133012
+Gustavus,AK,GST,P-N,11023
+Great Falls,MT,GTF,P-N,176434
+Columbus,MS,GTR,P-N,46246
+Gunnison,CO,GUC,P-N,36238
+Hayden,CO,HDN,P-N,100079
+Hagerstown,MD,HGR,P-N,23654
+Hilton Head,SC,HHH,P-N,36308
+Hibbing,MN,HIB,P-N,17111
+Helena,MT,HLN,P-N,115438
+"Honolulu, Oahu",HI,HNL,P-L,10017149
+Hobbs,NM,HOB,P-N,23475
+Homer,AK,HOM,P-N,46867
+Houston,TX,HOU,P-M,7053886
+White Plains,NY,HPN,P-S,789283
+Harlingen,TX,HRL,P-N,302236
+Huntsville,AL,HSV,P-S,580932
+Huntington,WA,HTS,P-N,101701
+New Haven,CT,HVN,P-N,38991
+Hyannis,MA,HYA,P-N,28341
+Hays,KS,HYS,P-N,11996
+"Washington, D.C. / Dulles / Chantilly",VA,IAD,P-L,11621623
+Niagara Falls,NY,IAG,P-N,119182
+Houston,TX,IAH,P-L,21157398
+Wichita,KS,ICT,P-S,812252
+Idaho Falls,ID,IDA,P-N,161019
+Bullhead City,AZ,IFP,P-N,131294
+Wilmington,NC,ILM,P-S,468816
+Iron Mountain,MI,IMT,P-N,19552
+Indianapolis,IN,IND,P-M,4655847
+International Falls,MN,INL,P-N,17225
+Williamsport,PA,IPT,P-N,22547
+Islip,NY,ISP,P-S,811535
+Ithaca,NY,ITH,P-N,99070
+"Hilo, Hawaii",HI,ITO,P-S,599148
+Jackson,WY,JAC,P-N,381539
+Jackson,MS,JAN,P-S,489454
+Jacksonville,FL,JAX,P-M,3135508
+New York,NY,JFK,P-L,30620769
+Joplin,MO,JLN,P-N,40013
+Jamestown,ND,JMS,P-N,11768
+Juneau,AK,JNU,P-N,440277
+Klawock,AK,KLW,P-N,13503
+"Kailua-Kona, Hawaii",HI,KOA,P-S,1829020
+St. Mary's,AK,KSM,P-N,11442
+Ketchikan,AK,KTN,P-N,135389
+Lansing,MI,LAN,P-N,184018
+Laramie,WY,LAR,P-N,17188
+Las Vegas,NV,LAS,P-L,23795012
+Lawton,OK,LAW,P-N,48086
+Los Angeles,AZ,LAX,P-L,42624050
+Lubbock,TX,LBB,P-S,484010
+Latrobe,PA,LBE,P-N,151410
+North Platte,NE,LBF,P-N,13798
+Lake Charles,LA,LCH,P-N,58122
+Columbus,OH,LCK,P-N,154475
+Lebanon,NH,LEB,P-N,10360
+Lexington,KY,LEX,P-S,657018
+Lafayette,LA,LFT,P-N,223529
+New York,NY,LGA,P-L,15058501
+Long Beach,AZ,LGB,P-S,1908635
+"Lihue, Kauai",HI,LIH,P-S,1644590
+Little Rock,AZ,LIT,P-S,1031258
+Lincoln,NE,LNK,P-N,150214
+"Lanai City, Lanai",HI,LNY,P-N,42061
+Laredo,TX,LRD,P-N,95858
+La Crosse,WI,LSE,P-N,99651
+Lewisburg,WA,LWB,P-N,10359
+Lewiston,ID,LWS,P-N,57957
+Lynchburg,VA,LYH,P-N,83392
+Midland / Odessa,TX,MAF,P-S,618794
+Saginaw,MI,MBS,P-N,127627
+Kansas City,MO,MCI,P-M,5790847
+Macon,GA,MCN,P-N,15431
+Orlando,FL,MCO,P-L,23202480
+Harrisburg,PA,MDT,P-S,636756
+Chicago,IL,MDW,P-L,10678018
+Meridian,MS,MEI,P-N,19332
+Memphis,TN,MEM,P-S,2213083
+McAllen,TX,MFE,P-N,347440
+Medford,OR,MFR,P-S,492217
+Montgomery,AL,MGM,P-N,170544
+Manhattan,KS,MHK,P-N,72883
+Manchester,NH,MHT,P-S,911225
+Miami,FL,MIA,P-L,21021640
+Milwaukee,WI,MKE,P-M,3496724
+Muskegon,MI,MKG,P-N,18718
+"Kaunakakai, Molokai",HI,MKK,P-N,79336
+Melbourne,FL,MLB,P-N,234939
+Moline,IL,MLI,P-N,355241
+Mammoth Lakes,AZ,MMH,P-N,23522
+Mobile,AL,MOB,P-N,297544
+Minot,ND,MOT,P-N,149865
+Marquette,MI,MQT,P-N,53558
+Anchorage,AK,MRI,P-N,10478
+Monterey,AZ,MRY,P-N,186806
+Madison,WI,MSN,P-S,1043185
+Missoula,MT,MSO,P-N,425563
+Minneapolis-St. Paul,MN,MSP,P-L,18361942
+New Orleans,LA,MSY,P-M,6582066
+Montrose,CO,MTJ,P-N,133924
+Vineyard Haven,MA,MVY,P-N,52605
+Marion,IL,MWA,P-N,11078
+Myrtle Beach,SC,MYR,P-S,1254307
+Jacksonville,NC,OAJ,P-N,152448
+Oakland,AZ,OAK,P-M,6686603
+Ogden,UT,OGD,P-N,18327
+"Kahului, Maui",HI,OGG,P-M,3571660
+Ogdensburg,NY,OGS,P-N,23448
+Oklahoma City,OK,OKC,P-S,2094708
+Omaha,NE,OMA,P-M,2454878
+Nome,AK,OME,P-N,64122
+Ontario,AZ,ONT,P-M,2498993
+Chicago,IL,ORD,P-L,39873927
+Norfolk,VA,ORF,P-S,1846031
+Worcester,MA,ORH,P-N,71631
+North Bend,OR,OTH,P-N,12369
+Kotzebue,AK,OTZ,P-N,69070
+Owensboro,KY,OWB,P-N,19532
+Paducah,KY,PAH,P-N,20934
+Plattsburgh,NY,PBG,P-N,119783
+West Palm Beach,FL,PBI,P-M,3270605
+Portland,OR,PDX,P-L,9804868
+Page,AZ,PGA,P-N,25387
+Punta Gorda,FL,PGD,P-S,787022
+Greenville,NC,PGV,P-N,51599
+Newport News,VA,PHF,P-N,195573
+Philadelphia,PA,PHL,P-L,15292670
+Phoenix,AZ,PHX,P-L,21662580
+Peoria,IL,PIA,P-N,328769
+St. Petersburg,FL,PIE,P-S,1115886
+Pocatello,ID,PIH,P-N,46303
+Pierre,SD,PIR,P-N,30124
+Pittsburgh,PA,PIT,P-M,4670033
+Pellston,MI,PLN,P-N,25464
+Pensacola,FL,PNS,P-S,972081
+Presque Isle,ME,PQI,P-N,10865
+Prescott,AZ,PRC,P-N,10337
+Pasco,WA,PSC,P-N,395348
+Petersburg,AK,PSG,P-N,24520
+Portsmouth,NH,PSM,P-N,92836
+Palm Springs,AZ,PSP,P-S,1163883
+Pueblo,CO,PUB,P-N,10459
+"Pullman / Moscow, Idaho",WA,PUW,P-N,66669
+Provincetown,MA,PVC,P-N,10316
+Providence,RI,PVD,P-S,2117409
+Provo,UT,PVU,P-N,80106
+Portland,ME,PWM,P-S,1062873
+Rapid City,SD,RAP,P-N,303471
+Redding,AZ,RDD,P-N,42775
+Redmond,OR,RDM,P-N,430562
+Raleigh,NC,RDU,P-M,6258101
+Rockford,IL,RFD,P-N,106710
+Rhinelander,WI,RHI,P-N,24477
+Richmond,VA,RIC,P-S,2048691
+Riverton,WY,RIW,P-N,11811
+Rockland,ME,RKD,P-N,17133
+Rock Springs,WY,RKS,P-N,23020
+Reno,NV,RNO,P-S,2048916
+Roanoke,VA,ROA,P-N,330063
+Rochester,NY,ROC,P-S,1281908
+Roswell,NM,ROW,P-N,56632
+Rochester,MN,RST,P-N,182509
+Fort Myers,FL,RSW,P-M,4602113
+Santa Fe,NM,SAF,P-N,115787
+San Diego,AZ,SAN,P-L,12174224
+San Antonio,TX,SAT,P-M,4844427
+Savannah,GA,SAV,P-S,1356660
+Santa Barbara,AZ,SBA,P-N,403745
+South Bend,IN,SBN,P-N,366617
+San Luis Obispo,AZ,SBP,P-N,235570
+Salisbury,MD,SBY,P-N,64393
+Deadhorse,AK,SCC,P-N,43655
+State College,PA,SCE,P-N,153571
+Stockton,AZ,SCK,P-N,98908
+Louisville,KY,SDF,P-S,1877861
+Sidney,MT,SDY,P-N,10055
+Seattle / Tacoma (SeaTac),WA,SEA,P-L,24024908
+Sanford,FL,SFB,P-S,1504888
+San Francisco,AZ,SFO,P-L,27790717
+Springfield,MO,SGF,P-S,523108
+St. George,UT,SGU,P-N,123060
+Staunton / Waynesboro / Harrisonburg,VA,SHD,P-N,12179
+Sheridan,WY,SHR,P-N,13182
+Shreveport,LA,SHV,P-N,291136
+Sitka,AK,SIT,P-N,87119
+San Jose,AZ,SJC,P-M,7032851
+San Angelo,TX,SJT,P-N,55301
+Salt Lake City,UT,SLC,P-L,12226730
+Salina,KS,SLN,P-N,15977
+Sacramento,AZ,SMF,P-M,5907629
+Santa Maria,AZ,SMX,P-N,23008
+Orange County,AZ,SNA,P-M,5201642
+Springfield,IL,SPI,P-N,776950
+Wichita Falls,TX,SPS,P-N,38026
+Sarasota,FL,SRQ,P-S,685001
+St. Cloud,MN,STC,P-N,22464
+St. Louis,MO,STL,P-M,7631953
+Santa Rosa,AZ,STS,P-N,217480
+Hailey / Sun Valley,ID,SUN,P-N,93280
+Sioux City,IA,SUX,P-N,44779
+Newburgh,NY,SWF,P-N,354869
+Stillwater,OK,SWO,P-N,27321
+Syracuse,NY,SYR,P-S,1139568
+Tallahassee,FL,TLH,P-N,384136
+Toledo,OH,TOL,P-N,123541
+Tampa,FL,TPA,P-L,10378514
+Tri-Cities,TN,TRI,P-N,200086
+Trenton,NJ,TTN,P-N,404349
+Tulsa,OK,TUL,P-S,1482908
+Tupelo,MS,TUP,P-N,13557
+Tucson,AZ,TUS,P-S,1753227
+Traverse City,MI,TVC,P-N,247324
+Twin Falls,ID,TWF,P-N,47084
+Texarkana,AZ,TXK,P-N,37599
+Tyler,TX,TYR,P-N,48532
+Knoxville,TN,TYS,P-S,1069565
+Quincy,IL,UIN,P-N,11633
+Unalakleet,AK,UNK,P-N,16208
+Concord,NC,USA,P-N,147065
+Valdez,AK,VDZ,P-N,10050
+Vernal,UT,VEL,P-N,10658
+Valdosta,GA,VLD,P-N,44609
+Fort Walton Beach,FL,VPS,P-S,683759
+Vero Beach,FL,VRB,P-N,10314
+Wrangell,AK,WRG,P-N,14033
+Westerly,RI,WST,P-N,17694
+West Yellowstone,MT,WYS,P-N,8200
+Fayetteville,AZ,XNA,P-S,759127
+Williston,ND,XWA,P-N,75332
+Yakutat,AK,YAK,P-N,11880
+Yakima,WA,YKM,P-N,69510
+Yuma,AZ,YUM,P-N,79731
