@@ -31,7 +31,7 @@ def normalize_name(name):
         name = name.partition('/')[0]
     if name.find(','):
         name = name.partition(',')[0]
-    name = name.rstrip(' ')
+    name = name.rstrip()
 
     # upcase name
     name = name.upper()

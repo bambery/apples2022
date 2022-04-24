@@ -176,18 +176,36 @@ def get_airports_cities():
                     continue
                 elif state == "KY":
                     if iata == "CVG":
-                        test_msa = '17140'
+                        test_msa = principal_cities.loc[ principal_cities["Principal City Name"] == 'CINCINNATI' ]
+                elif state == "MN":
+                    if iata == "MSP":
+                        test_msa = principal_cities.loc[ principal_cities["Principal City Name"] == 'MINNEAPOLIS' ]
+                elif state == "NJ":
+                    # "new york" is listed as the primary airport city for 'reasons'
+                    if iata == "EWR":
+                        city = "NEWARK"
+                elif state == "SC":
+                    # airport list omits "island" from the name
+                    if iata == "HHH":
+                        city = "HILTON HEAD ISLAND"
+                elif state == "TN":
+                    #  the "tri-cities" are (Bristol, Kingsport, Johnson City) 
+                    if iata == "TRI":
+                        city = "BRISTOL"
                 else:
                     # check to see if this is a metro/micropolitan area
-                    test_msa = principal_cities.loc[ (principal_cities["Principal City Name"].str.upper() == city) & (principal_cities["State"] == state) ]
+                    test_msa = principal_cities.loc[ (principal_cities["Principal City Name"] == city) & (principal_cities["State"] == state) ]
                 
                 if not test_msa.empty: # we found a cbsa
                     my_code = test_msa["CBSA Code"].squeeze()
                     my_size = test_msa["Metropolitan/Micropolitan Statistical Area"].squeeze()
+
                     if my_size.startswith("Metro"):
                         my_size = "METRO"
                     elif my_size.startswith("Micro"):
                         my_size = "MICRO"
+
+                    # associate ALL fips with the CBSA code for jhu lookup
                     df_test_fips = cbsas.loc[ cbsas["CBSA Code"] == my_code ]
                     state_fips = df_test_fips["FIPS State Code"].to_list()
                     county_fips = df_test_fips["FIPS County Code"].to_list()
@@ -196,7 +214,6 @@ def get_airports_cities():
                         # only the cbsa files use leading zeros - skip them for all other uses
                         fips_code = (c_state + c_county).lstrip('0')
                         fips_lookup[fips_code] = { "code": my_code, "size": my_size } 
-
                 # check to see if metro/micropolitan area 
                 # no hits in principal_cities, instead lookup fips
                 else: 
@@ -215,31 +232,4 @@ def get_airports_cities():
                         fips_lookup[my_fips] = { "code": None, "size": None }
                     else:
                         breakpoint()
-
-                    # note that somewhere around here is where I would weed out "outlying" if I wanted
-
-
-                        '''
-
-                # find the fips for this location
-                breakpoint()
-                test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == county)]['fips']
-                if not test_fips.empty: # nothing untoward here
-                    my_fips = test_fips.values[0]
-                else: 
-                    dashed_county = county.replace(' ', '-')
-                    test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == dashed_county)]['fips']
-                    if not test_fips.empty: # this county name needs a dash in place of whitespace
-                        my_fips = test_fips.values[0]
-                    else: # we can try one more thing for the county name - sometimes city/county omits "city" in the county name for blended
-                        city_county = county + " CITY"
-                        test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == city_county)]['fips']
-                        if not test_fips.empty: # this county name needs a dash in place of whitespace
-                            my_fips = test_fips.values[0]
-                        else: # we can try one more thing for the county name 
-                            # truly something has gone wrong
-                            print(" inside fips")
-                            print("something has gone wrong *********")
-                ans.append([city, state, county, my_fips, iata, role]) 
-    #'''
     return ans
