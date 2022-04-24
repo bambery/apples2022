@@ -27,8 +27,11 @@ def get_resource_dir() -> Path:
 def normalize_name(name):
 
     # if the name given is combined, choose the first. Dual names like this are either in the same FIPS or the same CBSA
-    if name.find("/"):
+    if name.find('/'):
         name = name.partition('/')[0]
+    if name.find(','):
+        name = name.partition(',')[0]
+    name = name.rstrip(' ')
 
     # upcase name
     name = name.upper()

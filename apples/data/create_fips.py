@@ -105,7 +105,7 @@ def get_city_counties():
             # If it ever begins to misbehave, I can reject known cities with multiple counties and manually add them in, using the designations listed above this method
             usecols=['city', 'state', 'county']).drop_duplicates(keep='first', subset=['city', 'state'])
     # drop any PR or other rows not in the official 50 states (plus DC, which has a unique fips of 11001)
-    df = df[df.state.isin(US_STATES.values())]
+    df = df[df.state.isin(utils.US_STATES.values())]
     df.reset_index(drop=True)
     # upcase city name for comparison
     df['city'] = df['city'].str.upper()
