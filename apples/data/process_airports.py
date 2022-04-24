@@ -21,8 +21,26 @@ def read_cbsa_lists():
     cbsas.rename(columns = {"State Name": "State"}, inplace = True)
     principal_cities = pd.read_excel( file_path_cbsa_list2, skiprows = 2, header = 0, usecols = [0, 2, 3, 4], nrows = 1269, dtype = {'CBSA Code': str, 'FIPS State Code': str}) 
     principal_cities["State"] = principal_cities["FIPS State Code"].map( utils.FIPS_US_STATE )
+
     return (cbsas, principal_cities)
 
+def get_fips():
+    df = pd.read_csv(file_path_fips,
+            header=0,
+            names=['fips', 'county', 'state'])
+    # delete rows with "NA" or "NaN" values in state column
+    df = df.dropna().reset_index(drop=True)
+    df['county'] = df['county'].map(utils.normalize_name)
+
+    # remove "County", "Census Area", "Borough"
+
+    breakpoint()
+
+    # should handle Juneau's strange county name here - the "city" is not wanted for once in the county name
+
+    return df
+
+fips = get_fips()
 
 # method: get_airports_cities() - 
 # - this method begins with the list of airports with city and state
@@ -59,8 +77,10 @@ def get_airports_cities():
             header = next(reader)
             state = 'AL' # setting default
             for row in reader:
-                county = '' # empty out county
-                my_fips = '' # empty
+                county = None 
+                my_fips = None 
+                my_code = None 
+                my_size = None
                 city = row[0]
                 city = utils.normalize_name(city)
 
@@ -71,18 +91,19 @@ def get_airports_cities():
                 # the file contains territorries as well as states - we are not looking at these right now.
                 if city == "AMERICAN SAMOA": # we are done
                     break
-                if (not iata): # we are in a state header row 
+                if (not role): # we are in a state header row 
                     state_name = city
                     if not utils.US_STATES.get(state_name):
-                        raise Exception("can you even reach this?")
-                        continue # if this never throws, delete this check 
+                        raise Exception("can you even reach this still?")
                     state = utils.US_STATES[state_name]
-                    continue # we have grabbed the state header
+                    # we have grabbed the state header
+                elif not iata:
+                    # Lake Hood Seaplane Base does not have an IATA, nor appear in the list of flights and will be discarded
+                    continue # skip to next entry
 
                 elif iata in ['DCA', 'IAD']: # DC needs to be manually handled
                     state = 'DC'
-                    city = 'WASHINGTONDC'
-                    # continue
+                    city = 'WASHINGTON DC'
 
                 fips_lookup = {} 
                 test_msa = principal_cities.loc[ (principal_cities["Principal City Name"].str.upper() == city) & (principal_cities["State"] == state) ]
@@ -97,18 +118,20 @@ def get_airports_cities():
                     df_test_fips = cbsas.loc[ cbsas["CBSA Code"] == my_code ]
                     state_fips = df_test_fips["FIPS State Code"].to_list()
                     county_fips = df_test_fips["FIPS County Code"].to_list()
-
-                    breakpoint()
+                else: # no hits in principal_cities, instead lookup fips
+                    test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == county)]['fips']
+                    if not test_fips.empty:
+                        breakpoint()
+                    else:
+                        breakpoint()
 
                     # note that somewhere around here is where I would weed out "outlying" if I wanted
 
                     for (state, county) in itertools.zip_longest(state_fips, county_fips):
                         fips_lookup[state + county] = { "code": my_code, "size": my_size } 
+
                         '''
 
-                else:
-                    print("here")
-                    breakpoint()
                 # find the fips for this location
                 breakpoint()
                 test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == county)]['fips']

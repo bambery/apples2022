@@ -39,8 +39,13 @@ def normalize_name(name):
     # there's only one 'sainte' but it gets the treatment too
     name = name.replace("STE.", "SAINTE")
 
-    # strip the trailing "county"
+    # strip any trailing identifiers  
     name = name.removesuffix(' COUNTY')
+    name = name.removesuffix(' CENSUS AREA')
+    name = name.removesuffix(' BOROUGH')
+    name = name.removesuffix(' MUNICIPALITY')
+    name = name.removesuffix(' PARISH')
+    name = name.removesuffix(' AND')
 
     # remove periods
     name = name.replace('.','')
@@ -49,8 +54,8 @@ def normalize_name(name):
     # remove empty spaces in name 
 #    name = name.replace(" ", "")
 
-    # remove dashes from name 
-    # UNSURE if I want this yet
-    #name = name.replace("-", "")
+    # replace dashes with whitespace - govt records are inconsistent on dash use
+    # UNSURE if I want this yet 
+    name = name.replace("-", " ")
 
     return name
