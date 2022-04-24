@@ -1,15 +1,15 @@
 import os
 import csv
 import pandas as pd
+
+#local imports
 import shared.utils as utils
 
 resources = utils.get_resource_dir() 
 file_path_fips = resources.joinpath("fips_by_date", "state_and_county_fips_master.csv")
 file_path_city_county = resources.joinpath("cities_by_county", "us_cities_states_counties.csv")
-file_path_airports_cities = resources.joinpath("airport-cities", "airports_wiki.csv")
 
-# mine
-# someday, look into pandas "converters" so I can clean inputs in the single read_csv statement
+
 
 #US_STATES = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE',
 #        'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 
@@ -111,19 +111,6 @@ def get_city_counties():
     df['city'] = df['city'].str.upper()
     return df
 
-def normalize_name(name):
-    # remove periods
-    name = name.replace('.','')
-    # remove single quotes
-    name = name.replace("'", "")
-    # upcase name
-    name = name.upper()
-    # remove empty spaces in name 
-    name = name.replace(" ", "")
-    # remove dashes from name 
-    name = name.replace("-", "")
-
-    return name
     
 
 # method: get_airports_cities() - 
@@ -161,12 +148,13 @@ def get_airports_cities():
             for row in reader:
                 county = '' # empty out county
                 my_fips = '' # empty
-                city = row[0].upper()
-                foo = normalize_name(city)
+                city = row[0]
+                city = utils.normalize_name(city)
 
                 iata = row[2]
                 airport = row[4]
                 role = row[5]
+                # the file contains territorries as well as states - we are not looking at these right now.
                 if city == "AMERICAN SAMOA": # we are done
                     break
                 if (not iata): # we are in a state header row 
@@ -201,7 +189,7 @@ def get_airports_cities():
                     elif city == "ST. MARY'S":
                         ans.append([city, state, 'WADE HAMPTON', 2270, iata, role]) # why no dash in county?
                         continue
-                    elif city.startswith('UTQ'): # this city is referred to as "Barrow" in fips
+                    elif city.startswith('UTQ'): # this city is referred to as "Barrow" in fips, in defiance of the city itself
                         ans.append(['BARROW', state, 'NORTH SLOPE', 2185, iata, role]) # city/county doesnt have "city" 
                         continue
                 if state == 'CA':
@@ -303,7 +291,7 @@ def get_airports_cities():
                 ans.append([city, state, county, my_fips, iata, role]) 
     return ans
 
-cities = get_city_counties()
-fips = get_fips()
-airports = get_airports_cities()
-breakpoint()
+#cities = get_city_counties()
+#fips = get_fips()
+#airports = get_airports_cities()
+#breakpoint()
