@@ -39,57 +39,21 @@ def get_fips():
 
     return df
 
-fips = get_fips()
-
-# AGS Augusta, GA: Richmond, 13245
-# AMA Amarillo, TX: Potter, 48375
-# ATL Atlanta, Georgia : Fulton, 13121
-# AUS Austin, TX: Travis, 48453
-# BHM Birmingham, AL: Jefferson, 1073
-# BWI Baltimore, MD: Baltimore City, 16794
-# CAE Columbia, SC: Richland
+# old notes about problem cities that drove the change from FIPs to CBSA:
 # CHO Charlottesville, VA: 82% of people employed here commute into the city, 42% of those from Albemarle County. An issue
 #   the options are Charlottesville City county, or Albermarle County.
 #   I will choose Charlottesville City County for the airport, Alberville will be captured by county proximity
-# CHS Charleston, SC: Charleston
-# CMH Columbus, OH: Franklin
-# DAL Dallas, TX: Dallas County
 # DFW Dallas, TX: Dallas County (Dallas/Forth Worth is another problem area)
-# DAY Dayton, OH: Montgomery
-# DEN Denver, CO: Denver
-# FSD Sioux Falls, SD: Minnehaha
-# HOU Houston, TX: Harris
-# IAH Houston, TX: Harris
-# IND Indianapolis, IA: Marion
-# JAN Jackson, MS: Hinds
-# JAX Jacksonville, FL: Duval
-# LAN Lansing, MI: Ingham
-# LCK Columbus, OH: Franklin
-# MCI Kansas City, MO: Jackson
-# MCO Orlando, FL: Orange
-# MSY New Orleans, LA: Orleans
 # OKC Oklahoma City, OK: Oklahoma (but significant areas spill over)
-# OMA Omaha, NE: Lancaster
-# PDX Portland, OR: Multnomah
-# PHL Philidelphia, PA: Philideplhia
-# RIC Richmond, VA: independent city (have not been indicating this) Richmond City
-# ROA Roanoke, VA: independent city Roanoke City
-# SAT San Antonio, TX: Bexar
-# SQR Sarasota, FL: Sarasota
-# TOL Toledo, OH: Lucas
-# TTN Trenton, NJ: Mercer
-# TUL Tulsa, OK: Tulsa
 
 def get_city_counties():
     df = pd.read_csv(file_path_city_county, 
             sep="|", 
             header=0,
             names=['city', 'state', 'state_long', 'county', 'city_alias'],
-            # For now, it seems capable of intelligently selecting the chronologically first entry from the input file.
             #   The input file is ordered by some unknown sorting mechanism which selected the "best" county for each city, 
             #   almost but not always based on geographical overlap with county maps (charlottesville, SC is one such 
             #   exception, see note below) 
-            # If it ever begins to misbehave, I can reject known cities with multiple counties and manually add them in, using the designations listed above this method
             usecols=['city', 'state', 'county']).drop_duplicates(keep='first', subset=['city', 'state'])
     # drop any PR or other rows not in the official 50 states (plus DC, which has a unique fips of 11001)
     df = df[df.state.isin(utils.US_STATES.values())]
@@ -98,43 +62,58 @@ def get_city_counties():
     df['city'] = df['city'].map(utils.normalize_name)
     return df
 
-# method: get_airports_cities() - 
-# - this method begins with the list of airports with city and state
-# - the method then associates the city/state with a county name
-# - then associates the county with a fips code
-
-# 1. read in list of airports [col num]- includes city/state [combined mess in 0], IATA [2], role(hub designation) [5], enplanements [6]
-#   - input is divided by state, with one row containing the state name, followed by the rows of airports in this state, then the next state name...
-#   - input contains entries for US territories, and must be filtered by 50 states + DC
-#   - certain airports are assigned to two cities - choose the first
-#   - DC and Hawaii have entries in a slightly different format and must be handled separately.
-# 2. associate city/state with a county
-#   - as with city name, sometimes there is more than one way to designate a name
-#   - names can have different shortenings - (Saint, St, St., Sainte, Ste., Ste)
-#   - sometimes some names will have dashes between one or more words
-# 3. to do:
-#   - strip all punctuation from a name
-#   - if "saint" or "st" appear ( now stripped of punctuation), choose "saint"
-#   - if "sainte" or "ste" appear, choose "Sainte"
-#   - finally, strip all whitespace
 
 
-def get_airports_cities():
-    # going to manually wrangle this one
-    # special cases: hawaii, washingtondc
-    # constructing the data object this way for easy transfer to pandas - list of lists, where the first list is col headers and all subsequent are rows
+
+def get_airports_cities(fips):
+
+    fips_lookup = {} 
+    uids = {}
+
+    # if cbsa_code is None, then there is no associated CBSA
+    def associate_ids(fips, cbsa_code, airport:None):
+
+        if cbsa_code:
+            df_test_fips = cbsas.loc[ cbsas["CBSA Code"] == cbsa_code ]
+            state_fips = df_test_fips["FIPS State Code"].to_list()
+            county_fips = df_test_fips["FIPS County Code"].to_list()
+
+            # since I am summing enplanements, I am going to drop the airport hub designation - can return if needed
+            # STOPPING: need to check if key exists
+            uids[cbsa_code] = {
+                fips: [],
+                airports: [],
+                size: my_size,
+                enplanements: 0
+            # add entry to fips lookup
+            }
+
+            for (c_state, c_county) in itertools.zip_longest(state_fips, county_fips):
+                # only the cbsa files use leading zeros - skip them for all other uses
+                fips_code = (c_state + c_county).lstrip('0')
+                if fips_code in fips_lookup:
+                    # this fip already exists
+                    # TODO: Task #13 - add enplanements as a sum of all airports within CBSA
+                    continue
+
+            fips_lookup[fips_code] = cbsa_code
+            # add fips to list of fips for the associated CBSA
+            if fips_code not in uids[cbsa_code][fips]: 
+                uids[cbsa_code][fips].append(fips_code)
+            if iata not in uids[cbsa_code][airports]:
+                uids[cbsa_code][airports].append(iata)
+        else: # this is a fips without a CBSA
+
 
     cbsas, principal_cities = read_cbsa_lists() 
     city_counties = get_city_counties()
 
-    ans = [['city', 'state', 'county', 'fips', 'iata', 'role', 'enplanements']]
     if os.path.exists(file_path_airports_cities):
         with open(file_path_airports_cities, "r", newline='') as file:
             reader = csv.reader(file, delimiter=",")
             header = next(reader)
             state = 'AL' # setting default
             # translation for fips to CBSA - gives FIPs if no CBSA
-            fips_lookup = {} 
             for row in reader:
                 county = None 
                 my_fips = None 
@@ -169,19 +148,25 @@ def get_airports_cities():
                     # Deadhorse is not listed in the city_counties file for some reason
                     if iata == "SCC":
                         my_fips = '2189'
-                        fips_lookup[my_fips] = { "code": None, "size": None }
+                        ##################
+                        associate_ids({"uid": my_fips, "fips": my_fips, "role": role, "size": None, "enplanements": enplanements}) 
+                        #fips_lookup[my_fips] = { "code": None, "size": None }
                     elif iata == "SIT":
                         my_fips = '2220'
-                        fips_lookup[my_fips] = { "code": None, "size": None }
+                        ######################
+                        associate_ids({"uid": my_fips, "fips": my_fips, "role": role, "size": None, "enplanements": enplanements}) 
+                        #fips_lookup[my_fips] = { "code": None, "size": None }
                     continue
                 elif state == "KY":
                     if iata == "CVG":
+                        # principal city and airport are in different states
                         test_msa = principal_cities.loc[ principal_cities["Principal City Name"] == 'CINCINNATI' ]
                 elif state == "MN":
                     if iata == "MSP":
+                        # principal city has unusual name entry
                         test_msa = principal_cities.loc[ principal_cities["Principal City Name"] == 'MINNEAPOLIS' ]
                 elif state == "NJ":
-                    # "new york" is listed as the primary airport city for 'reasons'
+                    # "new york" is listed as the primary airport city because ??? 
                     if iata == "EWR":
                         city = "NEWARK"
                 elif state == "SC":
@@ -205,17 +190,22 @@ def get_airports_cities():
                     elif my_size.startswith("Micro"):
                         my_size = "MICRO"
 
+                    #associate_ids( {"uid": my_code, "fips": None, "role": role }
                     # associate ALL fips with the CBSA code for jhu lookup
-                    df_test_fips = cbsas.loc[ cbsas["CBSA Code"] == my_code ]
-                    state_fips = df_test_fips["FIPS State Code"].to_list()
-                    county_fips = df_test_fips["FIPS County Code"].to_list()
+#                    df_test_fips = cbsas.loc[ cbsas["CBSA Code"] == my_code ]
+#                    state_fips = df_test_fips["FIPS State Code"].to_list()
+#                    county_fips = df_test_fips["FIPS County Code"].to_list()
 
-                    for (c_state, c_county) in itertools.zip_longest(state_fips, county_fips):
-                        # only the cbsa files use leading zeros - skip them for all other uses
-                        fips_code = (c_state + c_county).lstrip('0')
-                        fips_lookup[fips_code] = { "code": my_code, "size": my_size } 
-                # check to see if metro/micropolitan area 
-                # no hits in principal_cities, instead lookup fips
+#                    for (c_state, c_county) in itertools.zip_longest(state_fips, county_fips):
+#                        # only the cbsa files use leading zeros - skip them for all other uses
+#                        fips_code = (c_state + c_county).lstrip('0')
+#                        if fips_code in fips_lookup:
+#                            # this fip already exists
+#                            # TODO: Task #13 - add enplanements as a sum of all airports within CBSA
+#                            continue
+#                        fips_lookup[fips_code] = { "code": my_code, "size": my_size } 
+#
+                # no hits in principal_cities, so no CBSA for this region. Instead lookup fips
                 else: 
                     # grab the county for this state/city
                     test_county = city_counties.loc[(city_counties['state'] == state) & (city_counties['city'] == city)]['county']
@@ -223,13 +213,20 @@ def get_airports_cities():
                         county = test_county.values[0]
                     else: # truly something has gone wrong
                         breakpoint()
-                        raise Exception("we didn't find cbsa or fips for this county")
+                        raise Exception("we didn't find a county for this city: " + city + " " + state)
 
                     # now that we have the county for this city, find the fips
                     test_fips = fips.loc[(fips['state'] == state) & (fips['county'] == county)]['fips']
                     if not test_fips.empty:
                         my_fips = test_fips.values[0]
-                        fips_lookup[my_fips] = { "code": None, "size": None }
+
+                        associate_ids(my_fips, None)
+                        #fips_lookup[my_fips] = { "code": None, "size": None }
                     else:
-                        breakpoint()
+                        raise Exception("we didn't find cbsa or fips for this county: " county + " " + state )
+                     
     return ans
+
+def map_fips_to_cbsa(fip):
+
+
